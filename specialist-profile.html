@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specialist Profile - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .profile-container {
+            padding-top: 100px;
+            padding-bottom: var(--space-4xl);
+            background: var(--bg-primary);
+        }
+
+        .profile-header {
+            background: var(--bg-elevated);
+            padding: var(--space-3xl);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .profile-top {
+            display: flex;
+            gap: var(--space-2xl);
+            align-items: flex-start;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .profile-avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .profile-main {
+            flex-grow: 1;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(122, 155, 118, 0.15);
+            color: var(--color-primary-dark);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--color-sand);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .section {
+            background: var(--bg-elevated);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .review-card {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--color-sand);
+            margin-bottom: var(--space-lg);
+        }
+
+        .review-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+        }
+
+        .review-rating {
+            color: var(--color-accent);
+        }
+
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .day-slot {
+            text-align: center;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-sand);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .day-slot:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .day-slot.available {
+            background: rgba(122, 155, 118, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .day-label {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: var(--space-xs);
+        }
+
+        .day-date {
+            font-weight: 600;
+            font-size: var(--text-lg);
+        }
+
+        .sticky-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        @media (max-width: 1024px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-top {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .sticky-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-top">
+                    <img src="https://i.pravatar.cc/300?img=47" alt="Dr. Sarah Johnson" class="profile-avatar-large">
+                    
+                    <div class="profile-main">
+                        <div class="verified-badge">
+                            ✓ Verified Credentials
+                        </div>
+                        
+                        <h1 style="font-size: var(--text-4xl); margin-bottom: var(--space-sm);">Dr. Sarah Johnson</h1>
+                        <p style="font-size: var(--text-xl); color: var(--text-secondary); margin-bottom: var(--space-md);">
+                            Clinical Psychologist, MA, PhD
+                        </p>
+                        
+                        <div class="specialist-rating" style="margin-bottom: var(--space-lg);">
+                            <span class="rating-stars" style="font-size: var(--text-xl);">⭐⭐⭐⭐⭐</span>
+                            <span style="font-size: var(--text-lg); color: var(--text-secondary);">4.9 (127 reviews)</span>
+                        </div>
+                        
+                        <div class="specialist-details" style="margin-bottom: var(--space-lg);">
+                            <div class="specialist-detail">
+                                🗣️ English, Hindi
+                            </div>
+                            <div class="specialist-detail">
+                                💼 8 years experience
+                            </div>
+                            <div class="specialist-detail">
+                                📍 Licensed in California, New York
+                            </div>
+                        </div>
+                        
+                        <div class="specialist-specialties">
+                            <span class="specialty-tag">Anxiety & Depression</span>
+                            <span class="specialty-tag">Cognitive Behavioral Therapy</span>
+                            <span class="specialty-tag">Trauma Recovery</span>
+                            <span class="specialty-tag">Relationship Issues</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-number">450+</span>
+                        <span class="stat-label">Sessions</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24hr</span>
+                        <span class="stat-label">Response Time</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">$50</span>
+                        <span class="stat-label">Per Session</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="profile-content">
+                <!-- Left Column - Main Content -->
+                <div>
+                    <!-- About -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span>👤</span>
+                            About Me
+                        </h2>
+                        <p style="line-height: 1.8; color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                            Hello! I'm Dr. Sarah Johnson, a licensed clinical psychologist with over 8 years of experience helping individuals navigate life's challenges. My approach is rooted in compassion, evidence-based practices, and a genuine belief that everyone has the capacity for growth and healing.
+                        </p>
+                        <p style="line-height: 1.8; color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                            I specialize in working with adults dealing with anxiety, depression, trauma, and relationship issues. Whether you're facing a specific challenge or simply feeling stuck, I'm here to provide a safe, non-judgmental space where you can explore your thoughts and feelings.
+                        </p>
+                        <p style="line-height: 1.8; color: var(--text-secondary); margin: 0;">
+                            In our sessions, we'll work collaboratively to identify patterns, develop coping strategies, and build the resilience you need to create lasting change. I believe therapy is most effective when it's tailored to your unique needs, so I draw from various therapeutic approaches including CBT, ACT, and trauma-informed care.
+                        </p>
+                    </div>
+
+                    <!-- Education & Credentials -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span>🎓</span>
+                            Education & Credentials
+                        </h2>
+                        
+                        <div style="margin-bottom: var(--space-lg);">
+                            <h4 style="margin-bottom: var(--space-xs);">PhD in Clinical Psychology</h4>
+                            <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0;">
+                                Stanford University, 2015
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: var(--space-lg);">
+                            <h4 style="margin-bottom: var(--space-xs);">MA in Counseling Psychology</h4>
+                            <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0;">
+                                University of California, Berkeley, 2012
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: var(--space-lg);">
+                            <h4 style="margin-bottom: var(--space-xs);">Licensed Clinical Psychologist</h4>
+                            <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0;">
+                                California Board of Psychology (PSY 12345)
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 style="margin-bottom: var(--space-xs);">Certifications</h4>
+                            <ul style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0; padding-left: var(--space-lg);">
+                                <li>Certified in Cognitive Behavioral Therapy (CBT)</li>
+                                <li>Trauma-Focused CBT Certification</li>
+                                <li>EMDR Therapy Level 2</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Approach to Therapy -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span>💭</span>
+                            My Approach to Therapy
+                        </h2>
+                        <p style="line-height: 1.8; color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                            I believe that therapy is a collaborative journey. My role is to provide you with tools, support, and insights while you remain the expert on your own life. Together, we'll work to:
+                        </p>
+                        <ul style="color: var(--text-secondary); line-height: 1.8; margin: 0; padding-left: var(--space-lg);">
+                            <li>Identify and change unhelpful thought patterns</li>
+                            <li>Develop effective coping strategies for stress and anxiety</li>
+                            <li>Process past experiences that may be affecting your present</li>
+                            <li>Improve relationship and communication skills</li>
+                            <li>Build self-compassion and resilience</li>
+                            <li>Create actionable goals for personal growth</li>
+                        </ul>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <span>⭐</span>
+                            Patient Reviews
+                        </h2>
+                        
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="reviewer-name">Emily R.</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p style="color: var(--text-secondary); line-height: 1.7; margin: 0;">
+                                "Dr. Johnson has been instrumental in helping me manage my anxiety. Her approach is both compassionate and practical. I feel heard and supported in every session."
+                            </p>
+                        </div>
+                        
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="reviewer-name">Michael T.</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p style="color: var(--text-secondary); line-height: 1.7; margin: 0;">
+                                "After struggling with depression for years, Dr. Johnson helped me develop tools that actually work. She's patient, understanding, and genuinely cares about my progress."
+                            </p>
+                        </div>
+                        
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="reviewer-name">Sarah L.</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p style="color: var(--text-secondary); line-height: 1.7; margin: 0;">
+                                "Working with Dr. Johnson has been life-changing. She created a safe space where I could open up about my trauma. Her expertise in trauma-focused therapy made all the difference."
+                            </p>
+                        </div>
+                        
+                        <div class="review-card">
+                            <div class="review-header">
+                                <span class="reviewer-name">David K.</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p style="color: var(--text-secondary); line-height: 1.7; margin: 0;">
+                                "Highly recommend Dr. Johnson! She helped me work through relationship issues with practical strategies and deep insights. Very grateful for her support."
+                            </p>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-full" style="margin-top: var(--space-lg);">
+                            See All 127 Reviews
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column - Sidebar -->
+                <div class="sticky-sidebar">
+                    <!-- Booking Card -->
+                    <div class="section">
+                        <h3 style="margin-bottom: var(--space-lg);">Book a Session</h3>
+                        
+                        <div style="margin-bottom: var(--space-xl);">
+                            <div class="specialist-availability">
+                                <div class="availability-dot"></div>
+                                Available Today
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: var(--space-lg);">
+                            <h4 style="margin-bottom: var(--space-md); font-size: var(--text-base);">Choose Session Type</h4>
+                            
+                            <label class="form-radio" style="margin-bottom: var(--space-md);">
+                                <input type="radio" name="sessionType" value="chat" checked>
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div style="font-weight: 600;">Text Chat Session</div>
+                                    <div style="font-size: var(--text-sm); color: var(--text-secondary);">30 min • 50 tokens</div>
+                                </div>
+                            </label>
+                            
+                            <label class="form-radio">
+                                <input type="radio" name="sessionType" value="video">
+                                <span class="checkmark"></span>
+                                <div>
+                                    <div style="font-weight: 600;">Video Call Session</div>
+                                    <div style="font-size: var(--text-sm); color: var(--text-secondary);">30 min • 100 tokens</div>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <a href="booking.html?id=1" class="btn btn-primary btn-full btn-lg" style="margin-bottom: var(--space-md);">
+                            Book Now
+                        </a>
+                        
+                        <button class="btn btn-outline btn-full" onclick="sendMessage()">
+                            Send Message
+                        </button>
+                    </div>
+
+                    <!-- Availability This Week -->
+                    <div class="section">
+                        <h3 style="margin-bottom: var(--space-lg);">Availability This Week</h3>
+                        
+                        <div class="availability-grid">
+                            <div class="day-slot available">
+                                <div class="day-label">Mon</div>
+                                <div class="day-date">19</div>
+                            </div>
+                            <div class="day-slot available">
+                                <div class="day-label">Tue</div>
+                                <div class="day-date">20</div>
+                            </div>
+                            <div class="day-slot">
+                                <div class="day-label">Wed</div>
+                                <div class="day-date">21</div>
+                            </div>
+                            <div class="day-slot available">
+                                <div class="day-label">Thu</div>
+                                <div class="day-date">22</div>
+                            </div>
+                            <div class="day-slot available">
+                                <div class="day-label">Fri</div>
+                                <div class="day-date">23</div>
+                            </div>
+                            <div class="day-slot">
+                                <div class="day-label">Sat</div>
+                                <div class="day-date">24</div>
+                            </div>
+                            <div class="day-slot">
+                                <div class="day-label">Sun</div>
+                                <div class="day-date">25</div>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-md); text-align: center; margin-bottom: 0;">
+                            Click a day to see available time slots
+                        </p>
+                    </div>
+
+                    <!-- Token Balance -->
+                    <div class="section" style="background: linear-gradient(135deg, rgba(232, 196, 104, 0.1) 0%, rgba(232, 196, 104, 0.05) 100%);">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: var(--space-md);">💎</div>
+                            <div style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 700; color: var(--color-primary-dark); margin-bottom: var(--space-xs);" id="sidebarTokens">
+                                100
+                            </div>
+                            <div style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                                Your Token Balance
+                            </div>
+                            <a href="store.html" class="btn btn-outline btn-full">
+                                Buy More Tokens
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getTokens() {
+            return parseInt(localStorage.getItem('tokens') || '100');
+        }
+
+        document.getElementById('sidebarTokens').textContent = getTokens();
+
+        function sendMessage() {
+            alert('Message feature coming soon! For now, please book a session.');
+        }
+
+        // Get specialist ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const specialistId = urlParams.get('id') || '1';
+    </script>
+</body>
+</html>

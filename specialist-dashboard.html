@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specialist Dashboard - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .specialist-dashboard {
+            padding-top: 100px;
+            padding-bottom: var(--space-4xl);
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .stat-card {
+            background: var(--bg-elevated);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-trend {
+            font-size: var(--text-sm);
+            color: var(--color-success);
+            margin-top: var(--space-sm);
+        }
+
+        .patient-card {
+            background: var(--bg-elevated);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            border: 1px solid transparent;
+        }
+
+        .patient-card:hover {
+            border-color: var(--color-primary);
+            transform: translateX(4px);
+        }
+
+        .patient-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: var(--text-xl);
+            flex-shrink: 0;
+        }
+
+        .patient-info {
+            flex-grow: 1;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .patient-meta {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .appointment-card {
+            background: var(--bg-elevated);
+            padding: var(--space-xl);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--space-md);
+        }
+
+        .time-slot {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-md);
+            background: rgba(122, 155, 118, 0.1);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--color-primary-dark);
+        }
+
+        .verification-status {
+            background: linear-gradient(135deg, rgba(232, 196, 104, 0.2), rgba(232, 196, 104, 0.1));
+            border: 2px solid var(--color-accent);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .calendar-mini {
+            background: var(--bg-elevated);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--space-xs);
+        }
+
+        .calendar-day-mini {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .calendar-day-mini:hover {
+            background: var(--color-sand);
+        }
+
+        .calendar-day-mini.has-appointments {
+            background: rgba(122, 155, 118, 0.2);
+            font-weight: 600;
+        }
+
+        .calendar-day-mini.today {
+            background: var(--color-primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 10 C30 10 20 25 20 40 C20 55 30 65 40 75 C45 80 47 85 50 90 C53 85 55 80 60 75 C70 65 80 55 80 40 C80 25 70 10 50 10 Z M50 50 C40 50 35 45 35 40 C35 35 40 30 50 30 C60 30 65 35 65 40 C65 45 60 50 50 50 Z"/>
+                </svg>
+                <span>Serenity Mindspace</span>
+            </a>
+            
+            <div class="nav-actions">
+                <div class="token-display">
+                    <svg class="token-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+                    </svg>
+                    <span id="earningsCount">1,250</span> earned
+                </div>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="specialist-dashboard">
+        <div class="container">
+            <!-- Verification Status (if pending) -->
+            <div class="verification-status" id="verificationBanner" style="display: none;">
+                <div style="display: flex; align-items: center; gap: var(--space-lg);">
+                    <div style="font-size: 3rem;">⏳</div>
+                    <div style="flex-grow: 1;">
+                        <h3 style="color: var(--color-accent); margin-bottom: var(--space-sm);">Account Under Review</h3>
+                        <p style="color: var(--text-secondary); margin: 0;">
+                            Your credentials are being verified. This usually takes 24-48 hours. You'll be notified once approved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome Header -->
+            <div style="margin-bottom: var(--space-3xl);">
+                <h1 style="font-size: var(--text-5xl); margin-bottom: var(--space-sm);">Welcome, Dr. Sarah! 👋</h1>
+                <p style="font-size: var(--text-lg); color: var(--text-secondary);">
+                    Here's your practice overview for today
+                </p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Today's Appointments</div>
+                    <div class="stat-trend">↑ 12% from last week</div>
+                </div>
+
+                <div class="stat-card" style="border-left-color: var(--color-secondary);">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">45</div>
+                    <div class="stat-label">Active Patients</div>
+                    <div class="stat-trend">↑ 5 new this month</div>
+                </div>
+
+                <div class="stat-card" style="border-left-color: var(--color-accent);">
+                    <div class="stat-icon">💎</div>
+                    <div class="stat-value">1,250</div>
+                    <div class="stat-label">Tokens This Month</div>
+                    <div class="stat-trend">↑ 18% from last month</div>
+                </div>
+
+                <div class="stat-card" style="border-left-color: var(--color-success);">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value">4.9</div>
+                    <div class="stat-label">Average Rating</div>
+                    <div class="stat-trend">127 total reviews</div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-2xl); align-items: start;">
+                <!-- Left Column -->
+                <div>
+                    <!-- Today's Appointments -->
+                    <div class="section-header" style="margin-bottom: var(--space-xl);">
+                        <h2>Today's Appointments</h2>
+                        <a href="#" class="btn btn-sm btn-primary">+ Add Appointment</a>
+                    </div>
+
+                    <div class="card" style="margin-bottom: var(--space-3xl);">
+                        <div class="appointment-card">
+                            <div class="appointment-header">
+                                <div>
+                                    <h4 style="margin-bottom: var(--space-xs);">Emily Rodriguez</h4>
+                                    <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0;">
+                                        Anxiety Management • 4th Session
+                                    </p>
+                                </div>
+                                <div class="time-slot">
+                                    🕐 10:00 AM - 10:30 AM
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm);">
+                                <button class="btn btn-outline btn-sm">View Notes</button>
+                                <button class="btn btn-primary btn-sm">Join Session</button>
+                            </div>
+                        </div>
+
+                        <div class="appointment-card" style="border-left-color: var(--color-secondary);">
+                            <div class="appointment-header">
+                                <div>
+                                    <h4 style="margin-bottom: var(--space-xs);">Michael Chen</h4>
+                                    <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0;">
+                                        Depression Support • 8th Session
+                                    </p>
+                                </div>
+                                <div class="time-slot">
+                                    🕐 2:00 PM - 2:30 PM
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm);">
+                                <button class="btn btn-outline btn-sm">View Notes</button>
+                                <button class="btn btn-outline btn-sm">Reschedule</button>
+                            </div>
+                        </div>
+
+                        <div class="appointment-card" style="border-left-color: var(--color-accent);">
+                            <div class="appointment-header">
+                                <div>
+                                    <h4 style="margin-bottom: var(--space-xs);">Sarah Thompson</h4>
+                                    <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0;">
+                                        Life Transitions • Initial Consultation
+                                    </p>
+                                </div>
+                                <div class="time-slot">
+                                    🕐 4:00 PM - 4:30 PM
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm);">
+                                <button class="btn btn-outline btn-sm">View Assessment</button>
+                                <button class="btn btn-outline btn-sm">Prepare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Patients -->
+                    <div class="section-header" style="margin-bottom: var(--space-xl);">
+                        <h2>Recent Patients</h2>
+                        <a href="#" class="btn btn-sm btn-outline">View All</a>
+                    </div>
+
+                    <div class="card">
+                        <div class="patient-card">
+                            <div class="patient-avatar">ER</div>
+                            <div class="patient-info">
+                                <div class="patient-name">Emily Rodriguez</div>
+                                <div class="patient-meta">Last session: 2 days ago • 4 total sessions</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline">View</button>
+                        </div>
+
+                        <div class="patient-card">
+                            <div class="patient-avatar" style="background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-dark));">MC</div>
+                            <div class="patient-info">
+                                <div class="patient-name">Michael Chen</div>
+                                <div class="patient-meta">Last session: 5 days ago • 8 total sessions</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline">View</button>
+                        </div>
+
+                        <div class="patient-card">
+                            <div class="patient-avatar" style="background: linear-gradient(135deg, var(--color-accent), #d4b456);">ST</div>
+                            <div class="patient-info">
+                                <div class="patient-name">Sarah Thompson</div>
+                                <div class="patient-meta">New patient • Initial consultation today</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline">View</button>
+                        </div>
+
+                        <div class="patient-card">
+                            <div class="patient-avatar" style="background: linear-gradient(135deg, #7C9FD4, #5D7FB8);">DK</div>
+                            <div class="patient-info">
+                                <div class="patient-name">David Kim</div>
+                                <div class="patient-meta">Last session: 1 week ago • 6 total sessions</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Quick Actions -->
+                    <div class="card" style="margin-bottom: var(--space-xl);">
+                        <h3 style="margin-bottom: var(--space-lg);">Quick Actions</h3>
+                        <div style="display: grid; gap: var(--space-sm);">
+                            <button class="btn btn-outline btn-full">📝 Add Session Notes</button>
+                            <button class="btn btn-outline btn-full">📅 Set Availability</button>
+                            <button class="btn btn-outline btn-full">💰 Request Withdrawal</button>
+                            <button class="btn btn-outline btn-full">📊 View Analytics</button>
+                        </div>
+                    </div>
+
+                    <!-- Calendar -->
+                    <div class="calendar-mini">
+                        <div class="calendar-header">
+                            <button style="background: none; border: none; cursor: pointer; font-size: var(--text-xl);">←</button>
+                            <h4>February 2026</h4>
+                            <button style="background: none; border: none; cursor: pointer; font-size: var(--text-xl);">→</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-xs); margin-bottom: var(--space-sm); text-align: center; font-size: var(--text-xs); color: var(--text-tertiary);">
+                            <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                        </div>
+                        
+                        <div class="calendar-grid">
+                            <div class="calendar-day-mini"></div>
+                            <div class="calendar-day-mini"></div>
+                            <div class="calendar-day-mini"></div>
+                            <div class="calendar-day-mini"></div>
+                            <div class="calendar-day-mini"></div>
+                            <div class="calendar-day-mini"></div>
+                            <div class="calendar-day-mini">1</div>
+                            <div class="calendar-day-mini">2</div>
+                            <div class="calendar-day-mini has-appointments">3</div>
+                            <div class="calendar-day-mini has-appointments">4</div>
+                            <div class="calendar-day-mini">5</div>
+                            <div class="calendar-day-mini has-appointments">6</div>
+                            <div class="calendar-day-mini">7</div>
+                            <div class="calendar-day-mini">8</div>
+                            <div class="calendar-day-mini">9</div>
+                            <div class="calendar-day-mini has-appointments">10</div>
+                            <div class="calendar-day-mini has-appointments">11</div>
+                            <div class="calendar-day-mini">12</div>
+                            <div class="calendar-day-mini has-appointments">13</div>
+                            <div class="calendar-day-mini">14</div>
+                            <div class="calendar-day-mini">15</div>
+                            <div class="calendar-day-mini">16</div>
+                            <div class="calendar-day-mini today">17</div>
+                            <div class="calendar-day-mini has-appointments">18</div>
+                            <div class="calendar-day-mini has-appointments">19</div>
+                            <div class="calendar-day-mini">20</div>
+                            <div class="calendar-day-mini has-appointments">21</div>
+                        </div>
+                        
+                        <div style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--color-sand); font-size: var(--text-sm); color: var(--text-secondary);">
+                            <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-xs);">
+                                <div style="width: 12px; height: 12px; background: rgba(122, 155, 118, 0.2); border-radius: 2px;"></div>
+                                <span>Days with appointments</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                                <div style="width: 12px; height: 12px; background: var(--color-primary); border-radius: 2px;"></div>
+                                <span>Today</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings Summary -->
+                    <div class="card" style="margin-top: var(--space-xl); background: linear-gradient(135deg, rgba(122, 155, 118, 0.05), rgba(122, 155, 118, 0.1));">
+                        <h3 style="margin-bottom: var(--space-lg);">This Month's Earnings</h3>
+                        <div style="text-align: center; margin-bottom: var(--space-lg);">
+                            <div style="font-family: var(--font-display); font-size: var(--text-5xl); font-weight: 700; color: var(--color-primary-dark);">
+                                1,250 💎
+                            </div>
+                            <div style="color: var(--text-secondary); margin-top: var(--space-sm);">
+                                ≈ ₹12,500
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-full">Request Withdrawal</button>
+                        <p style="text-align: center; font-size: var(--text-xs); color: var(--text-tertiary); margin-top: var(--space-sm); margin-bottom: 0;">
+                            Minimum withdrawal: 500 tokens
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userType');
+            window.location.href = 'index.html';
+        }
+
+        // Check verification status
+        const verificationStatus = localStorage.getItem('verificationStatus');
+        if (verificationStatus === 'pending') {
+            document.getElementById('verificationBanner').style.display = 'block';
+        }
+
+        // Check if user is specialist
+        if (localStorage.getItem('userType') !== 'specialist') {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

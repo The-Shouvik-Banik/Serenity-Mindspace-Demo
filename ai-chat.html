@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-info">
+                <div style="display: flex; align-items: center; gap: var(--space-md);">
+                    <a href="choose-support.html" class="btn btn-ghost" style="padding: var(--space-sm);">
+                        ←
+                    </a>
+                    <div class="chat-avatar" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        🤖
+                    </div>
+                    <div class="chat-details">
+                        <h3>AI Assistant</h3>
+                        <div class="chat-status">
+                            <div class="status-indicator"></div>
+                            Always available
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: var(--space-md);">
+                <div class="badge badge-primary" id="messagesLeft">10 free messages left</div>
+                <div class="token-display" id="headerTokens">
+                    <svg class="token-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+                    </svg>
+                    <span id="chatTokenCount">100</span>
+                </div>
+                <button class="btn btn-ghost" onclick="toggleMenu()">⋮</button>
+            </div>
+        </div>
+
+        <!-- Assessment Context Badge -->
+        <div style="background: rgba(122, 155, 118, 0.1); padding: var(--space-md); text-align: center; border-bottom: 1px solid var(--color-sand);">
+            <span style="font-size: var(--text-sm); color: var(--color-primary-dark);">
+                ✓ AI has reviewed your wellness assessment and is ready to support you
+            </span>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message">
+                <div class="message-avatar" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    🤖
+                </div>
+                <div class="message-content">
+                    <div class="message-text">
+                        Hello! I'm your AI wellness companion. I've reviewed your assessment and I'm here to support you. I understand you've been experiencing some challenges, and I want you to know that reaching out is a sign of strength.
+                        <br><br>
+                        How are you feeling right now? Would you like to talk about what brought you here today?
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div style="background: var(--bg-elevated); padding: var(--space-md); border-top: 1px solid var(--color-sand); display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+            <button class="btn btn-sm btn-outline" onclick="sendQuickMessage('I\'m feeling overwhelmed')">
+                I'm feeling overwhelmed
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="sendQuickMessage('Need breathing exercise')">
+                Breathing exercise
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="sendQuickMessage('Feeling anxious')">
+                Feeling anxious
+            </button>
+            <a href="specialists.html" class="btn btn-sm" style="background: var(--color-accent); color: var(--color-dark);">
+                Talk to Human Specialist
+            </a>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea 
+                    id="messageInput" 
+                    class="chat-input" 
+                    placeholder="Type your message..." 
+                    rows="1"
+                    onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"
+                ></textarea>
+                <button class="chat-send-btn" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options Menu Modal -->
+    <div class="modal-overlay" id="optionsMenu" style="display: none;">
+        <div class="modal">
+            <button class="modal-close" onclick="toggleMenu()">✕</button>
+            <div class="modal-header">
+                <h3 class="modal-title">Chat Options</h3>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-outline btn-full" onclick="exportChat()" style="margin-bottom: var(--space-md);">
+                    📄 Export Transcript
+                </button>
+                <button class="btn btn-outline btn-full" onclick="clearChat()" style="margin-bottom: var(--space-md);">
+                    🗑️ Clear Chat History
+                </button>
+                <a href="store.html" class="btn btn-primary btn-full">
+                    💎 Buy More Tokens
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Token Warning Modal -->
+    <div class="modal-overlay" id="tokenWarning" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-icon">⚠️</div>
+                <h3 class="modal-title">Low on Tokens</h3>
+                <p class="modal-subtitle">You have less than 20 tokens remaining</p>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); text-align: center;">
+                    Purchase more tokens to continue chatting with the AI assistant, or switch to a specialist.
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="document.getElementById('tokenWarning').style.display='none'">Continue</button>
+                <a href="store.html" class="btn btn-primary">Buy Tokens</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messageCount = 0;
+        let freeMessagesLeft = 10;
+
+        // Initialize
+        updateTokenDisplay();
+        
+        function updateTokenDisplay() {
+            const tokens = parseInt(localStorage.getItem('tokens') || '100');
+            document.getElementById('chatTokenCount').textContent = tokens;
+            
+            if (tokens < 20) {
+                document.getElementById('tokenWarning').style.display = 'flex';
+            }
+        }
+
+        function getTokens() {
+            return parseInt(localStorage.getItem('tokens') || '100');
+        }
+
+        function setTokens(amount) {
+            localStorage.setItem('tokens', amount.toString());
+            updateTokenDisplay();
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('optionsMenu');
+            menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function sendQuickMessage(text) {
+            document.getElementById('messageInput').value = text;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Check tokens if past free messages
+            messageCount++;
+            if (messageCount > 10) {
+                const currentTokens = getTokens();
+                if (currentTokens < 5) {
+                    alert('Insufficient tokens! Please purchase more tokens to continue.');
+                    return;
+                }
+                setTokens(currentTokens - 5);
+                freeMessagesLeft = 0;
+            } else {
+                freeMessagesLeft--;
+            }
+            
+            updateMessagesLeft();
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTyping();
+            
+            // Simulate AI response (In production, this would call Gemini API)
+            setTimeout(() => {
+                hideTyping();
+                const response = generateResponse(message);
+                addMessage(response, 'assistant');
+            }, 1500);
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar" style="background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                        You
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(text)}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        🤖
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(text)}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'message';
+            typingDiv.innerHTML = `
+                <div class="message-avatar" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    🤖
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function updateMessagesLeft() {
+            const badge = document.getElementById('messagesLeft');
+            if (freeMessagesLeft > 0) {
+                badge.textContent = `${freeMessagesLeft} free messages left`;
+            } else {
+                badge.textContent = '5 tokens per message';
+            }
+        }
+
+        function generateResponse(userMessage) {
+            // Simple response logic - In production, this would use Gemini API
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('overwhelmed') || message.includes('stressed')) {
+                return "I hear that you're feeling overwhelmed. That's completely valid, and you're not alone in feeling this way. Let's try a quick grounding technique:\n\nTake a deep breath with me. Name 5 things you can see around you right now. This helps bring us back to the present moment. Would you like to try that, or would you prefer to talk about what's making you feel overwhelmed?";
+            } else if (message.includes('anxious') || message.includes('anxiety')) {
+                return "Anxiety can feel really difficult. I'm here with you. Would it help to talk through what's making you anxious, or would you prefer some immediate calming techniques like breathing exercises? Remember, anxiety is your body trying to protect you - even if it feels uncomfortable.";
+            } else if (message.includes('breathing') || message.includes('exercise')) {
+                return "Let's do a simple breathing exercise together:\n\n1. Breathe in slowly through your nose for 4 counts\n2. Hold for 4 counts\n3. Breathe out slowly through your mouth for 6 counts\n4. Repeat 3-5 times\n\nThis activates your body's relaxation response. How are you feeling now?";
+            } else if (message.includes('sad') || message.includes('depressed')) {
+                return "I'm sorry you're feeling this way. Sadness is a natural emotion, but when it persists, it's important to address it. You've taken a brave step by reaching out. Would you like to talk about what's been contributing to these feelings, or explore some coping strategies that might help?";
+            } else {
+                return "Thank you for sharing that with me. I want you to know that your feelings are valid. Would you like to tell me more about what you're experiencing? I'm here to listen and support you through this.";
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        function exportChat() {
+            const messages = document.querySelectorAll('.message');
+            let transcript = 'Serenity Mindspace - Chat Transcript\n';
+            transcript += `Date: ${new Date().toLocaleDateString()}\n\n`;
+            
+            messages.forEach(msg => {
+                const sender = msg.classList.contains('user') ? 'You' : 'AI Assistant';
+                const text = msg.querySelector('.message-text').textContent;
+                const time = msg.querySelector('.message-time').textContent;
+                transcript += `[${time}] ${sender}: ${text}\n\n`;
+            });
+            
+            const blob = new Blob([transcript], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `chat-transcript-${Date.now()}.txt`;
+            a.click();
+            
+            toggleMenu();
+        }
+
+        function clearChat() {
+            if (confirm('Are you sure you want to clear chat history? This cannot be undone.')) {
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.innerHTML = `
+                    <div class="message">
+                        <div class="message-avatar" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                            🤖
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                Chat history cleared. How can I support you today?
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                `;
+                messageCount = 0;
+                freeMessagesLeft = 10;
+                updateMessagesLeft();
+            }
+            toggleMenu();
+        }
+
+        // Auto-resize textarea
+        const textarea = document.getElementById('messageInput');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+    </script>
+</body>
+</html>

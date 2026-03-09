@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #1A1A1A;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-main {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .video-placeholder {
+            text-align: center;
+            color: white;
+        }
+
+        .avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto var(--space-xl);
+            border: 4px solid var(--color-primary);
+        }
+
+        .video-pip {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            width: 240px;
+            height: 180px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #2A2A2A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-xl);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .controls-center {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-size: 1.5rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .control-btn.danger {
+            background: rgba(212, 124, 124, 0.3);
+            border-color: var(--color-error);
+        }
+
+        .control-btn.danger:hover {
+            background: var(--color-error);
+        }
+
+        .session-info {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .connection-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+        }
+
+        .connection-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .timer {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            padding: var(--space-sm) var(--space-lg);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-full);
+        }
+
+        .participant-name {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            color: white;
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        .chat-sidebar {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 350px;
+            background: rgba(42, 42, 42, 0.95);
+            backdrop-filter: blur(20px);
+            transform: translateX(100%);
+            transition: transform var(--transition-base);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .chat-sidebar-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-sidebar-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: var(--space-lg);
+        }
+
+        .chat-sidebar-input {
+            padding: var(--space-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-message {
+            margin-bottom: var(--space-md);
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: var(--text-sm);
+        }
+
+        .sidebar-message.user {
+            background: rgba(122, 155, 118, 0.2);
+        }
+
+        .notification-banner {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(122, 155, 118, 0.9);
+            backdrop-filter: blur(10px);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-full);
+            color: white;
+            font-weight: 500;
+            display: none;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .video-pip {
+                width: 120px;
+                height: 90px;
+                bottom: 100px;
+                right: 10px;
+            }
+
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .chat-sidebar {
+                width: 100%;
+            }
+
+            .session-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <!-- Main Video -->
+        <div class="video-main" id="remoteVideo">
+            <div class="video-placeholder">
+                <img src="https://i.pravatar.cc/300?img=47" alt="Dr. Sarah Johnson" class="avatar-large">
+                <h2 style="color: white; margin-bottom: var(--space-md);">Dr. Sarah Johnson</h2>
+                <p style="color: rgba(255, 255, 255, 0.7);">Connecting...</p>
+            </div>
+        </div>
+
+        <!-- Participant Name -->
+        <div class="participant-name">
+            Dr. Sarah Johnson
+        </div>
+
+        <!-- Notification Banner -->
+        <div class="notification-banner" id="notification">
+            Screen sharing started
+        </div>
+
+        <!-- Picture-in-Picture (Your Video) -->
+        <div class="video-pip" id="localVideo">
+            <div style="font-size: var(--text-sm); opacity: 0.7;">Your camera is off</div>
+        </div>
+
+        <!-- Video Controls -->
+        <div class="video-controls">
+            <div class="session-info">
+                <div class="connection-indicator">
+                    <div class="connection-dot"></div>
+                    <span>Excellent connection</span>
+                </div>
+                <div class="timer" id="sessionTimer">29:45</div>
+            </div>
+
+            <div class="controls-center">
+                <button class="control-btn" id="micBtn" onclick="toggleMic()" title="Mute/Unmute">
+                    🎤
+                </button>
+                <button class="control-btn" id="cameraBtn" onclick="toggleCamera()" title="Camera On/Off">
+                    📹
+                </button>
+                <button class="control-btn danger" onclick="endCall()" title="End Call">
+                    📞
+                </button>
+                <button class="control-btn" id="chatBtn" onclick="toggleChat()" title="Chat">
+                    💬
+                </button>
+                <button class="control-btn" id="shareBtn" onclick="shareScreen()" title="Share Screen">
+                    🖥️
+                </button>
+            </div>
+
+            <div style="display: flex; gap: var(--space-md);">
+                <button class="control-btn" onclick="toggleSettings()" title="Settings">
+                    ⚙️
+                </button>
+                <button class="control-btn" onclick="toggleFullscreen()" title="Fullscreen">
+                    ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Sidebar -->
+        <div class="chat-sidebar" id="chatSidebar">
+            <div class="chat-sidebar-header">
+                <h3>In-Call Chat</h3>
+                <button style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;" onclick="toggleChat()">
+                    ×
+                </button>
+            </div>
+            <div class="chat-sidebar-messages" id="sidebarMessages">
+                <div class="sidebar-message">
+                    <strong>Dr. Sarah</strong>
+                    <p>I can see you now! How are you feeling today?</p>
+                    <small style="opacity: 0.7;">2:01 PM</small>
+                </div>
+            </div>
+            <div class="chat-sidebar-input">
+                <div style="display: flex; gap: var(--space-sm);">
+                    <input 
+                        type="text" 
+                        id="chatInput" 
+                        placeholder="Type a message..." 
+                        style="flex-grow: 1; padding: var(--space-md); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.05); color: white;"
+                        onkeydown="if(event.key==='Enter') sendChatMessage()"
+                    >
+                    <button 
+                        onclick="sendChatMessage()" 
+                        style="padding: var(--space-md); border-radius: var(--radius-md); background: var(--color-primary); color: white; border: none; cursor: pointer;"
+                    >
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Call Modal -->
+    <div class="modal-overlay" id="endCallModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-icon">👋</div>
+                <h3 class="modal-title">End Video Session?</h3>
+                <p class="modal-subtitle">Are you sure you want to leave this session?</p>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--text-secondary);">
+                    Your session will be saved and you can review notes in your dashboard.
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="document.getElementById('endCallModal').style.display='none'">
+                    Stay in Call
+                </button>
+                <button class="btn" style="background: var(--color-error); color: white;" onclick="confirmEndCall()">
+                    End Session
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal" style="display: none;">
+        <div class="modal">
+            <button class="modal-close" onclick="toggleSettings()">✕</button>
+            <div class="modal-header">
+                <h3 class="modal-title">Video Settings</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Camera</label>
+                    <select class="form-select">
+                        <option>Default Camera</option>
+                        <option>External Webcam</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Microphone</label>
+                    <select class="form-select">
+                        <option>Default Microphone</option>
+                        <option>External Microphone</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Speaker</label>
+                    <select class="form-select">
+                        <option>Default Speaker</option>
+                        <option>Headphones</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" checked>
+                        <span class="checkmark"></span>
+                        Enable background blur
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        Enable noise cancellation
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Session timer
+        let sessionSeconds = 30 * 60;
+        let sessionTimer;
+        let micMuted = false;
+        let cameraOff = false;
+        let screenSharing = false;
+
+        function startTimer() {
+            sessionTimer = setInterval(() => {
+                sessionSeconds--;
+                const minutes = Math.floor(sessionSeconds / 60);
+                const seconds = sessionSeconds % 60;
+                document.getElementById('sessionTimer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (sessionSeconds <= 0) {
+                    clearInterval(sessionTimer);
+                    showNotification('Session time ended');
+                    setTimeout(() => endCall(), 2000);
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+        // Simulate connection after 2 seconds
+        setTimeout(() => {
+            document.getElementById('remoteVideo').innerHTML = `
+                <video autoplay style="width: 100%; height: 100%; object-fit: cover;">
+                    <source src="" type="video/mp4">
+                </video>
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-md);">📹</div>
+                    <p>Connected with Dr. Sarah Johnson</p>
+                    <p style="font-size: var(--text-sm); opacity: 0.7;">In production, this would show live video feed</p>
+                </div>
+            `;
+            showNotification('Connected successfully');
+        }, 2000);
+
+        function toggleMic() {
+            micMuted = !micMuted;
+            const btn = document.getElementById('micBtn');
+            btn.textContent = micMuted ? '🎤' : '🎤';
+            btn.classList.toggle('active');
+            btn.style.textDecoration = micMuted ? 'line-through' : 'none';
+            showNotification(micMuted ? 'Microphone muted' : 'Microphone unmuted');
+        }
+
+        function toggleCamera() {
+            cameraOff = !cameraOff;
+            const btn = document.getElementById('cameraBtn');
+            const pip = document.getElementById('localVideo');
+            
+            if (cameraOff) {
+                pip.innerHTML = '<div style="font-size: var(--text-sm); opacity: 0.7;">Camera is off</div>';
+                btn.style.textDecoration = 'line-through';
+                showNotification('Camera turned off');
+            } else {
+                pip.innerHTML = '<div style="font-size: var(--text-sm); opacity: 0.7;">Your video</div>';
+                btn.style.textDecoration = 'none';
+                showNotification('Camera turned on');
+            }
+        }
+
+        function toggleChat() {
+            const sidebar = document.getElementById('chatSidebar');
+            sidebar.classList.toggle('open');
+            document.getElementById('chatBtn').classList.toggle('active');
+        }
+
+        function shareScreen() {
+            screenSharing = !screenSharing;
+            const btn = document.getElementById('shareBtn');
+            btn.classList.toggle('active');
+            showNotification(screenSharing ? 'Screen sharing started' : 'Screen sharing stopped');
+        }
+
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const container = document.getElementById('sidebarMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'sidebar-message user';
+            messageDiv.innerHTML = `
+                <strong>You</strong>
+                <p>${escapeHtml(message)}</p>
+                <small style="opacity: 0.7;">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            input.value = '';
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function endCall() {
+            document.getElementById('endCallModal').style.display = 'flex';
+        }
+
+        function confirmEndCall() {
+            clearInterval(sessionTimer);
+            window.location.href = 'dashboard.html';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Prevent accidental page close
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+    </script>
+</body>
+</html>

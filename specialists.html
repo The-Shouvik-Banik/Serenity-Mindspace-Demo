@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Specialist - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .specialists-container {
+            padding-top: 100px;
+            padding-bottom: var(--space-4xl);
+            background: var(--bg-primary);
+        }
+
+        .specialists-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .filters-sidebar {
+            position: sticky;
+            top: 100px;
+            background: var(--bg-elevated);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-title {
+            font-family: var(--font-display);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .specialists-grid {
+            display: grid;
+            gap: var(--space-xl);
+        }
+
+        @media (max-width: 1024px) {
+            .specialists-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="specialists-container">
+        <div class="container">
+            <div class="page-header" style="text-align: center; margin-bottom: var(--space-3xl);">
+                <h1 style="font-size: var(--text-5xl); margin-bottom: var(--space-md);">Find Your Specialist</h1>
+                <p style="font-size: var(--text-xl); color: var(--text-secondary);">
+                    Connect with verified mental health professionals who care
+                </p>
+            </div>
+
+            <div class="specialists-layout">
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <h3 style="margin-bottom: var(--space-lg);">Filters</h3>
+
+                    <div class="filter-section">
+                        <div class="filter-title">Specialization</div>
+                        <select class="form-select" id="specializationFilter">
+                            <option value="">All Specializations</option>
+                            <option value="anxiety">Anxiety & Stress</option>
+                            <option value="depression">Depression</option>
+                            <option value="trauma">Trauma & PTSD</option>
+                            <option value="relationships">Relationships</option>
+                            <option value="cbt">Cognitive Behavioral</option>
+                            <option value="addiction">Addiction</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-title">Language</div>
+                        <label class="form-checkbox">
+                            <input type="checkbox" value="english" checked>
+                            <span class="checkmark"></span>
+                            English
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" value="hindi">
+                            <span class="checkmark"></span>
+                            Hindi
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" value="spanish">
+                            <span class="checkmark"></span>
+                            Spanish
+                        </label>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-title">Experience</div>
+                        <div style="padding: var(--space-sm) 0;">
+                            <input type="range" min="0" max="20" value="0" style="width: 100%;" id="experienceRange">
+                            <div style="display: flex; justify-content: space-between; font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-sm);">
+                                <span>0 years</span>
+                                <span id="experienceValue">0+ years</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-title">Availability</div>
+                        <label class="form-radio">
+                            <input type="radio" name="availability" value="any" checked>
+                            <span class="checkmark"></span>
+                            Anytime
+                        </label>
+                        <label class="form-radio">
+                            <input type="radio" name="availability" value="today">
+                            <span class="checkmark"></span>
+                            Available Today
+                        </label>
+                        <label class="form-radio">
+                            <input type="radio" name="availability" value="week">
+                            <span class="checkmark"></span>
+                            This Week
+                        </label>
+                    </div>
+
+                    <button class="btn btn-outline btn-full" onclick="resetFilters()">
+                        Reset Filters
+                    </button>
+                </aside>
+
+                <!-- Specialists Grid -->
+                <div class="specialists-grid" id="specialistsList">
+                    <!-- Specialist 1 -->
+                    <div class="specialist-card">
+                        <div class="specialist-header">
+                            <img src="https://i.pravatar.cc/150?img=47" alt="Dr. Sarah Johnson" class="specialist-avatar">
+                            <div class="specialist-info">
+                                <h3 class="specialist-name">Dr. Sarah Johnson</h3>
+                                <div class="specialist-title">Clinical Psychologist</div>
+                                <div class="specialist-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span>4.9 (127 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specialist-details">
+                            <div class="specialist-detail">
+                                🗣️ English, Hindi
+                            </div>
+                            <div class="specialist-detail">
+                                💼 8 years experience
+                            </div>
+                        </div>
+
+                        <div class="specialist-specialties">
+                            <span class="specialty-tag">Anxiety & Depression</span>
+                            <span class="specialty-tag">CBT</span>
+                            <span class="specialty-tag">Trauma Recovery</span>
+                        </div>
+
+                        <p class="specialist-bio">
+                            "I believe in creating a safe, non-judgmental space where you can explore your thoughts and feelings. Together, we'll work on building resilience and finding practical strategies for lasting change."
+                        </p>
+
+                        <div class="specialist-footer">
+                            <div>
+                                <div class="specialist-availability">
+                                    <div class="availability-dot"></div>
+                                    Available Today
+                                </div>
+                            </div>
+                            <div class="specialist-price">50 💎/session</div>
+                        </div>
+
+                        <div class="specialist-actions">
+                            <a href="specialist-profile.html?id=1" class="btn btn-outline" style="flex: 1;">View Profile</a>
+                            <a href="booking.html?id=1" class="btn btn-primary" style="flex: 1;">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Specialist 2 -->
+                    <div class="specialist-card">
+                        <div class="specialist-header">
+                            <img src="https://i.pravatar.cc/150?img=33" alt="Dr. Michael Chen" class="specialist-avatar">
+                            <div class="specialist-info">
+                                <h3 class="specialist-name">Dr. Michael Chen</h3>
+                                <div class="specialist-title">Psychiatrist</div>
+                                <div class="specialist-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span>4.8 (93 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specialist-details">
+                            <div class="specialist-detail">
+                                🗣️ English, Mandarin
+                            </div>
+                            <div class="specialist-detail">
+                                💼 12 years experience
+                            </div>
+                        </div>
+
+                        <div class="specialist-specialties">
+                            <span class="specialty-tag">Depression</span>
+                            <span class="specialty-tag">Anxiety Disorders</span>
+                            <span class="specialty-tag">Medication Management</span>
+                        </div>
+
+                        <p class="specialist-bio">
+                            "My approach combines medication management with evidence-based therapy. I'm here to help you understand your mental health and create a comprehensive treatment plan."
+                        </p>
+
+                        <div class="specialist-footer">
+                            <div>
+                                <div class="specialist-availability">
+                                    <div class="availability-dot"></div>
+                                    Available Today
+                                </div>
+                            </div>
+                            <div class="specialist-price">50 💎/session</div>
+                        </div>
+
+                        <div class="specialist-actions">
+                            <a href="specialist-profile.html?id=2" class="btn btn-outline" style="flex: 1;">View Profile</a>
+                            <a href="booking.html?id=2" class="btn btn-primary" style="flex: 1;">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Specialist 3 -->
+                    <div class="specialist-card">
+                        <div class="specialist-header">
+                            <img src="https://i.pravatar.cc/150?img=32" alt="Dr. Priya Sharma" class="specialist-avatar">
+                            <div class="specialist-info">
+                                <h3 class="specialist-name">Dr. Priya Sharma</h3>
+                                <div class="specialist-title">Licensed Counselor</div>
+                                <div class="specialist-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span>5.0 (156 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specialist-details">
+                            <div class="specialist-detail">
+                                🗣️ English, Hindi, Punjabi
+                            </div>
+                            <div class="specialist-detail">
+                                💼 6 years experience
+                            </div>
+                        </div>
+
+                        <div class="specialist-specialties">
+                            <span class="specialty-tag">Relationships</span>
+                            <span class="specialty-tag">Life Transitions</span>
+                            <span class="specialty-tag">Cultural Identity</span>
+                        </div>
+
+                        <p class="specialist-bio">
+                            "I specialize in helping individuals navigate life's challenges with compassion and cultural sensitivity. Let's work together to build a life that feels authentic and fulfilling."
+                        </p>
+
+                        <div class="specialist-footer">
+                            <div>
+                                <div class="specialist-availability">
+                                    <div class="availability-dot"></div>
+                                    Available This Week
+                                </div>
+                            </div>
+                            <div class="specialist-price">50 💎/session</div>
+                        </div>
+
+                        <div class="specialist-actions">
+                            <a href="specialist-profile.html?id=3" class="btn btn-outline" style="flex: 1;">View Profile</a>
+                            <a href="booking.html?id=3" class="btn btn-primary" style="flex: 1;">Book Now</a>
+                        </div>
+                    </div>
+
+                    <!-- Specialist 4 -->
+                    <div class="specialist-card">
+                        <div class="specialist-header">
+                            <img src="https://i.pravatar.cc/150?img=27" alt="Dr. James Wilson" class="specialist-avatar">
+                            <div class="specialist-info">
+                                <h3 class="specialist-name">Dr. James Wilson</h3>
+                                <div class="specialist-title">Trauma Specialist</div>
+                                <div class="specialist-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span>4.9 (84 reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specialist-details">
+                            <div class="specialist-detail">
+                                🗣️ English
+                            </div>
+                            <div class="specialist-detail">
+                                💼 15 years experience
+                            </div>
+                        </div>
+
+                        <div class="specialist-specialties">
+                            <span class="specialty-tag">PTSD</span>
+                            <span class="specialty-tag">EMDR</span>
+                            <span class="specialty-tag">Complex Trauma</span>
+                        </div>
+
+                        <p class="specialist-bio">
+                            "With extensive training in trauma-focused therapies, I help individuals process difficult experiences and reclaim their lives. Healing is possible, and I'm here to guide you."
+                        </p>
+
+                        <div class="specialist-footer">
+                            <div>
+                                <div class="specialist-availability">
+                                    <div class="availability-dot"></div>
+                                    Available Today
+                                </div>
+                            </div>
+                            <div class="specialist-price">50 💎/session</div>
+                        </div>
+
+                        <div class="specialist-actions">
+                            <a href="specialist-profile.html?id=4" class="btn btn-outline" style="flex: 1;">View Profile</a>
+                            <a href="booking.html?id=4" class="btn btn-primary" style="flex: 1;">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Experience slider
+        const experienceRange = document.getElementById('experienceRange');
+        const experienceValue = document.getElementById('experienceValue');
+
+        experienceRange.addEventListener('input', (e) => {
+            experienceValue.textContent = `${e.target.value}+ years`;
+        });
+
+        function resetFilters() {
+            document.getElementById('specializationFilter').value = '';
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = cb.value === 'english';
+            });
+            experienceRange.value = 0;
+            experienceValue.textContent = '0+ years';
+            document.querySelector('input[name="availability"][value="any"]').checked = true;
+        }
+
+        // Filter logic would go here in production
+    </script>
+</body>
+</html>

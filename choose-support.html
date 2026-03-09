@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Support - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .choose-container {
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: var(--space-4xl);
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(164, 196, 160, 0.05) 100%);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-4xl);
+        }
+
+        .page-title {
+            font-size: var(--text-5xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .page-subtitle {
+            font-size: var(--text-xl);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-2xl);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1024px) {
+            .support-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="choose-container">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Choose Your Support Type</h1>
+                <p class="page-subtitle">
+                    Select the type of support that feels right for you. You can switch between options anytime.
+                </p>
+            </div>
+
+            <div class="support-grid">
+                <!-- AI Assistant Card -->
+                <div class="support-card">
+                    <div class="support-icon">🤖</div>
+                    <h3 class="support-title">AI Assistant</h3>
+                    <div class="support-subtitle">Available 24/7 • Instant</div>
+                    
+                    <p class="support-description">
+                        Smart AI that understands your needs and provides compassionate support and coping strategies. Perfect for immediate help or when you need someone to talk to.
+                    </p>
+                    
+                    <div class="support-meta">
+                        <div class="support-price">
+                            💎 5 tokens/message
+                        </div>
+                        <div class="support-rating" style="color: var(--color-accent);">
+                            ⭐ First 10 messages FREE
+                        </div>
+                    </div>
+                    
+                    <a href="ai-chat.html" class="btn btn-primary btn-full btn-lg">
+                        Start Chatting →
+                    </a>
+                </div>
+
+                <!-- Chat Specialist Card -->
+                <div class="support-card">
+                    <div class="support-icon">💬</div>
+                    <h3 class="support-title">Chat with Specialist</h3>
+                    <div class="support-subtitle">Licensed Professionals</div>
+                    
+                    <p class="support-description">
+                        Connect with verified therapists through secure text messaging. Get professional support through thoughtful, written conversation at your own pace.
+                    </p>
+                    
+                    <div class="support-meta">
+                        <div class="support-price">
+                            💎 50 tokens per 30 min
+                        </div>
+                        <div class="support-rating">
+                            ⭐ 4.8 avg rating
+                        </div>
+                    </div>
+                    
+                    <a href="specialists.html?type=chat" class="btn btn-secondary btn-full btn-lg">
+                        Browse Specialists →
+                    </a>
+                </div>
+
+                <!-- Video Call Card -->
+                <div class="support-card">
+                    <div class="support-icon">📹</div>
+                    <h3 class="support-title">Video Call Specialist</h3>
+                    <div class="support-subtitle">Face-to-Face Sessions</div>
+                    
+                    <p class="support-description">
+                        Book video appointments with licensed specialists for deeper therapeutic work. Experience the benefits of face-to-face therapy from anywhere.
+                    </p>
+                    
+                    <div class="support-meta">
+                        <div class="support-price">
+                            💎 100 tokens per 30 min
+                        </div>
+                        <div class="support-rating">
+                            📅 Book Now or Schedule
+                        </div>
+                    </div>
+                    
+                    <a href="specialists.html?type=video" class="btn btn-primary btn-full btn-lg">
+                        View Available Slots →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="grid grid-2" style="gap: var(--space-xl); margin-top: var(--space-4xl); max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div class="card card-flat">
+                    <h4 style="margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm);">
+                        <span style="font-size: 1.5rem;">💡</span>
+                        Not Sure Which to Choose?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">
+                        Start with our AI assistant for immediate support. You can always upgrade to a specialist later if needed.
+                    </p>
+                    <a href="ai-chat.html" class="btn btn-outline">Try AI Assistant</a>
+                </div>
+
+                <div class="card card-flat">
+                    <h4 style="margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm);">
+                        <span style="font-size: 1.5rem;">🎁</span>
+                        Need More Tokens?
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">
+                        You currently have <strong id="currentTokens">100</strong> tokens. Purchase more anytime to continue your sessions.
+                    </p>
+                    <a href="store.html" class="btn btn-outline">Buy Tokens</a>
+                </div>
+            </div>
+
+            <!-- Assessment Summary -->
+            <div class="card" style="max-width: 700px; margin: var(--space-4xl) auto 0; background: linear-gradient(135deg, rgba(122, 155, 118, 0.05) 0%, rgba(212, 146, 124, 0.05) 100%);">
+                <h4 style="margin-bottom: var(--space-md);">📊 Based on Your Assessment</h4>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);" id="assessmentSummary">
+                    We've reviewed your wellness assessment and recommend starting with professional support for the best results.
+                </p>
+                <div class="badge badge-primary">All your data is encrypted and confidential</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Display current tokens
+        function getTokens() {
+            return parseInt(localStorage.getItem('tokens') || '100');
+        }
+
+        document.getElementById('currentTokens').textContent = getTokens();
+
+        // Show personalized message based on assessment
+        const assessmentData = JSON.parse(localStorage.getItem('assessmentData') || '{}');
+        const summaryEl = document.getElementById('assessmentSummary');
+
+        if (assessmentData.impact === 'severe' || assessmentData.selfHarm === 'recently') {
+            summaryEl.innerHTML = `
+                <strong>We strongly recommend speaking with a licensed specialist.</strong><br>
+                Based on your assessment, professional support would be most beneficial for your situation.
+            `;
+        } else if (assessmentData.impact === 'significant') {
+            summaryEl.innerHTML = `
+                We recommend starting with a specialist for personalized guidance. However, our AI assistant is also available 24/7 for immediate support.
+            `;
+        } else {
+            summaryEl.innerHTML = `
+                Our AI assistant can provide immediate support, or you can connect with a specialist for more structured therapy. Both options are available to you.
+            `;
+        }
+    </script>
+</body>
+</html>

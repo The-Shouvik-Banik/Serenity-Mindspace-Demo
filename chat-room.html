@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Dr. Sarah Johnson - Serenity Mindspace</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-info">
+                <div style="display: flex; align-items: center; gap: var(--space-md);">
+                    <a href="dashboard.html" class="btn btn-ghost" style="padding: var(--space-sm);">
+                        ←
+                    </a>
+                    <img src="https://i.pravatar.cc/150?img=47" alt="Dr. Sarah Johnson" class="chat-avatar">
+                    <div class="chat-details">
+                        <h3>Dr. Sarah Johnson</h3>
+                        <div class="chat-status">
+                            <div class="status-indicator"></div>
+                            Online • Typing...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: var(--space-md);">
+                <div class="badge badge-primary" id="sessionTime">29:45 remaining</div>
+                <button class="btn btn-ghost" onclick="toggleMenu()">⋮</button>
+            </div>
+        </div>
+
+        <!-- Assessment Context Badge -->
+        <div style="background: rgba(122, 155, 118, 0.1); padding: var(--space-md); text-align: center; border-bottom: 1px solid var(--color-sand); cursor: pointer;" onclick="showAssessment()">
+            <span style="font-size: var(--text-sm); color: var(--color-primary-dark);">
+                📊 View your wellness assessment summary
+            </span>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; padding: var(--space-lg); color: var(--text-tertiary); font-size: var(--text-sm);">
+                <div style="background: var(--color-sand); border-radius: var(--radius-full); padding: var(--space-sm) var(--space-lg); display: inline-block; margin-bottom: var(--space-md);">
+                    🔒 End-to-end encrypted
+                </div>
+                <p>Session started • February 17, 2026 at 2:00 PM</p>
+            </div>
+
+            <div class="message">
+                <img src="https://i.pravatar.cc/150?img=47" alt="Dr. Sarah Johnson" class="message-avatar">
+                <div class="message-content">
+                    <div class="message-text">
+                        Hi! I'm Dr. Sarah Johnson. I'm so glad you're here. I've reviewed your wellness assessment, and I want you to know that reaching out for support is a sign of strength, not weakness.
+                    </div>
+                    <div class="message-time">2:01 PM</div>
+                </div>
+            </div>
+
+            <div class="message">
+                <img src="https://i.pravatar.cc/150?img=47" alt="Dr. Sarah Johnson" class="message-avatar">
+                <div class="message-content">
+                    <div class="message-text">
+                        I noticed from your assessment that you've been experiencing some anxiety and stress. Before we dive deeper, I'd love to hear from you in your own words - how are you feeling right now, in this moment?
+                    </div>
+                    <div class="message-time">2:01 PM</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Info Bar -->
+        <div style="background: rgba(122, 155, 118, 0.05); padding: var(--space-md); border-top: 1px solid var(--color-sand); display: flex; justify-content: space-between; align-items: center; font-size: var(--text-sm);">
+            <div style="display: flex; gap: var(--space-lg);">
+                <span>📝 Session Notes Available</span>
+                <span>💡 Homework Assignments</span>
+            </div>
+            <button class="btn btn-sm" style="background: var(--color-accent); color: var(--color-dark);" onclick="tipSpecialist()">
+                ❤️ Tip Specialist
+            </button>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <div style="display: flex; gap: var(--space-sm); padding-bottom: var(--space-sm);">
+                <button class="btn btn-sm btn-outline" onclick="insertEmoji('👍')">👍</button>
+                <button class="btn btn-sm btn-outline" onclick="insertEmoji('❤️')">❤️</button>
+                <button class="btn btn-sm btn-outline" onclick="insertEmoji('😊')">😊</button>
+                <button class="btn btn-sm btn-outline" onclick="insertEmoji('🙏')">🙏</button>
+            </div>
+            <div class="chat-input-wrapper">
+                <button class="btn btn-ghost" style="padding: var(--space-sm);" title="Attach file">
+                    📎
+                </button>
+                <textarea 
+                    id="messageInput" 
+                    class="chat-input" 
+                    placeholder="Type your message..." 
+                    rows="1"
+                    onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"
+                ></textarea>
+                <button class="chat-send-btn" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options Menu Modal -->
+    <div class="modal-overlay" id="optionsMenu" style="display: none;">
+        <div class="modal">
+            <button class="modal-close" onclick="toggleMenu()">✕</button>
+            <div class="modal-header">
+                <h3 class="modal-title">Session Options</h3>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-outline btn-full" onclick="viewSessionNotes()" style="margin-bottom: var(--space-md);">
+                    📝 View Session Notes
+                </button>
+                <button class="btn btn-outline btn-full" onclick="exportTranscript()" style="margin-bottom: var(--space-md);">
+                    💾 Export Transcript
+                </button>
+                <button class="btn btn-outline btn-full" onclick="extendSession()" style="margin-bottom: var(--space-md);">
+                    ⏱️ Extend Session (+50 tokens)
+                </button>
+                <button class="btn btn-outline btn-full" style="margin-bottom: var(--space-md);" onclick="reportIssue()">
+                    ⚠️ Report Issue
+                </button>
+                <button class="btn btn-primary btn-full" style="background: var(--color-error);" onclick="endSession()">
+                    🔴 End Session Early
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessment Summary Modal -->
+    <div class="modal-overlay" id="assessmentModal" style="display: none;">
+        <div class="modal" style="max-width: 600px;">
+            <button class="modal-close" onclick="document.getElementById('assessmentModal').style.display='none'">✕</button>
+            <div class="modal-header">
+                <div class="modal-icon">📊</div>
+                <h3 class="modal-title">Your Wellness Assessment</h3>
+                <p class="modal-subtitle">Summary shared with your specialist</p>
+            </div>
+            <div class="modal-body">
+                <div class="card card-flat" style="margin-bottom: var(--space-md);">
+                    <h4 style="margin-bottom: var(--space-sm);">Current Concerns</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+                        <span class="specialty-tag">Anxiety</span>
+                        <span class="specialty-tag">Work Stress</span>
+                        <span class="specialty-tag">Sleep Issues</span>
+                    </div>
+                </div>
+                
+                <div class="card card-flat" style="margin-bottom: var(--space-md);">
+                    <h4 style="margin-bottom: var(--space-sm);">Goals for Therapy</h4>
+                    <ul style="color: var(--text-secondary); margin: 0; padding-left: var(--space-lg);">
+                        <li>Manage stress better</li>
+                        <li>Develop coping skills</li>
+                        <li>Improve sleep quality</li>
+                    </ul>
+                </div>
+                
+                <div class="card card-flat">
+                    <h4 style="margin-bottom: var(--space-sm);">Preferred Support Style</h4>
+                    <p style="color: var(--text-secondary); margin: 0;">
+                        Both practical advice and emotional support
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tip Modal -->
+    <div class="modal-overlay" id="tipModal" style="display: none;">
+        <div class="modal">
+            <button class="modal-close" onclick="document.getElementById('tipModal').style.display='none'">✕</button>
+            <div class="modal-header">
+                <div class="modal-icon">❤️</div>
+                <h3 class="modal-title">Tip Your Specialist</h3>
+                <p class="modal-subtitle">Show appreciation for great support</p>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: var(--space-xl);">
+                    Tips go directly to Dr. Sarah Johnson
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-xl);">
+                    <button class="btn btn-outline" onclick="selectTip(10)">10 💎</button>
+                    <button class="btn btn-outline" onclick="selectTip(25)">25 💎</button>
+                    <button class="btn btn-outline" onclick="selectTip(50)">50 💎</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Custom Amount</label>
+                    <input type="number" id="customTip" class="form-input" placeholder="Enter amount" min="1">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="document.getElementById('tipModal').style.display='none'">Cancel</button>
+                <button class="btn btn-primary" onclick="sendTip()">Send Tip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session End Modal -->
+    <div class="modal-overlay" id="endModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-icon">✅</div>
+                <h3 class="modal-title">Session Complete</h3>
+                <p class="modal-subtitle">Thank you for your session with Dr. Sarah Johnson</p>
+            </div>
+            <div class="modal-body">
+                <div class="card card-flat" style="margin-bottom: var(--space-lg);">
+                    <h4 style="margin-bottom: var(--space-md);">How was your session?</h4>
+                    <div style="text-align: center; margin-bottom: var(--space-lg);">
+                        <div id="ratingStars" style="font-size: 2rem; cursor: pointer;">
+                            <span onclick="rate(1)">⭐</span>
+                            <span onclick="rate(2)">⭐</span>
+                            <span onclick="rate(3)">⭐</span>
+                            <span onclick="rate(4)">⭐</span>
+                            <span onclick="rate(5)">⭐</span>
+                        </div>
+                    </div>
+                    <textarea class="form-textarea" placeholder="Share your feedback (optional)" rows="3"></textarea>
+                </div>
+                
+                <div class="card card-flat">
+                    <h4 style="margin-bottom: var(--space-md);">Next Steps</h4>
+                    <ul style="color: var(--text-secondary); margin: 0; padding-left: var(--space-lg);">
+                        <li>Session notes will be available in your dashboard</li>
+                        <li>Practice the coping techniques we discussed</li>
+                        <li>Book your next session when you're ready</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="goToDashboard()">Go to Dashboard</button>
+                <button class="btn btn-primary" onclick="bookAnother()">Book Another Session</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sessionSeconds = 30 * 60; // 30 minutes
+        let sessionTimer;
+
+        // Start session timer
+        function startTimer() {
+            sessionTimer = setInterval(() => {
+                sessionSeconds--;
+                
+                const minutes = Math.floor(sessionSeconds / 60);
+                const seconds = sessionSeconds % 60;
+                document.getElementById('sessionTime').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+                
+                if (sessionSeconds <= 0) {
+                    clearInterval(sessionTimer);
+                    endSession();
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+        function toggleMenu() {
+            const menu = document.getElementById('optionsMenu');
+            menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function showAssessment() {
+            document.getElementById('assessmentModal').style.display = 'flex';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar" style="background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                    You
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${escapeHtml(message)}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            input.value = '';
+            
+            // Simulate specialist response
+            setTimeout(() => {
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'message';
+                responseDiv.innerHTML = `
+                    <img src="https://i.pravatar.cc/150?img=47" alt="Dr. Sarah Johnson" class="message-avatar">
+                    <div class="message-content">
+                        <div class="message-text">Thank you for sharing that with me. I hear you, and your feelings are completely valid. Let's explore this together...</div>
+                        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                `;
+                messagesContainer.appendChild(responseDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+
+        function insertEmoji(emoji) {
+            const input = document.getElementById('messageInput');
+            input.value += emoji;
+            input.focus();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function viewSessionNotes() {
+            alert('Session notes feature coming soon! Your specialist will add notes after the session.');
+            toggleMenu();
+        }
+
+        function exportTranscript() {
+            alert('Transcript exported! Check your downloads folder.');
+            toggleMenu();
+        }
+
+        function extendSession() {
+            const currentTokens = parseInt(localStorage.getItem('tokens') || '100');
+            if (currentTokens < 50) {
+                alert('Insufficient tokens! You need 50 tokens to extend this session.');
+                return;
+            }
+            
+            if (confirm('Extend session by 30 minutes for 50 tokens?')) {
+                localStorage.setItem('tokens', (currentTokens - 50).toString());
+                sessionSeconds += 30 * 60;
+                alert('Session extended by 30 minutes!');
+            }
+            toggleMenu();
+        }
+
+        function reportIssue() {
+            alert('Please describe the issue and our support team will reach out within 24 hours.');
+            toggleMenu();
+        }
+
+        function endSession() {
+            clearInterval(sessionTimer);
+            toggleMenu();
+            document.getElementById('endModal').style.display = 'flex';
+        }
+
+        function tipSpecialist() {
+            document.getElementById('tipModal').style.display = 'flex';
+        }
+
+        let selectedTipAmount = 0;
+
+        function selectTip(amount) {
+            selectedTipAmount = amount;
+            document.getElementById('customTip').value = '';
+        }
+
+        function sendTip() {
+            const customAmount = parseInt(document.getElementById('customTip').value);
+            const amount = customAmount || selectedTipAmount;
+            
+            if (!amount || amount < 1) {
+                alert('Please select or enter a tip amount');
+                return;
+            }
+            
+            const currentTokens = parseInt(localStorage.getItem('tokens') || '100');
+            if (currentTokens < amount) {
+                alert('Insufficient tokens!');
+                return;
+            }
+            
+            localStorage.setItem('tokens', (currentTokens - amount).toString());
+            document.getElementById('tipModal').style.display = 'none';
+            alert(`Thank you! Your ${amount} token tip has been sent to Dr. Sarah Johnson.`);
+        }
+
+        function rate(stars) {
+            alert(`Thank you for rating this session ${stars} stars!`);
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function bookAnother() {
+            window.location.href = 'booking.html?id=1';
+        }
+
+        // Auto-resize textarea
+        const textarea = document.getElementById('messageInput');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+    </script>
+</body>
+</html>
